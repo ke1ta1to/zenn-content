@@ -3,7 +3,7 @@ title: "AWS Route53でマイクラサーバーのDNS設定"
 emoji: "📦"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["aws", "route53", "minecraft"]
-published: false
+published: true
 ---
 
 # はじめに
