@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "preview": "zenn preview",
-    "new": "zenn new:article"
+    "new": "zenn new:article --slug"
   },
   "repository": {
     "type": "git",
