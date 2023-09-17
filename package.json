@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "preview": "zenn preview",
-    "new": "zenn new:article --slug"
+    "new": "zenn new:article --slug",
+    "format": "prettier . --write"
   },
   "repository": {
     "type": "git",
@@ -20,5 +21,8 @@
   "homepage": "https://github.com/kk79it/zenn-content#readme",
   "dependencies": {
     "zenn-cli": "^0.1.146"
+  },
+  "devDependencies": {
+    "prettier": "3.0.3"
   }
 }
