@@ -3,7 +3,8 @@ title: "DirectusをSelf-Hostedしてみる"
 emoji: "🐰"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["directus", "cms", "docker"]
-published: false
+published: true
+publication_name: "team411"
 ---
 
 ## はじめに
@@ -318,4 +319,8 @@ volumes:
 
 ## 終わりに
 
-他にも変更できるところが多々あるので、公式ドキュメントを熟読する必要がありそうです。英語の情報もあまりないよう（調べ方が悪い？）なので試行錯誤して解決していく必要がありそうです。Directus、とても良いHeadless CMSなのでぜひ国内でも広まってほしいですね。
+他にも変更できるところが多々あるので、公式ドキュメントを熟読する必要がありそうです。英語の情報もあまりないよう（調べ方が悪い？）なので試行錯誤して解決していく必要がありそうです。
+
+Gitなどに上げる場合はシークレットキーなどが公開されないよう、docker-composeの`env_file`を利用すれば良さそうです。
+
+Directus、とても良いHeadless CMSなのでぜひ国内でも広まってほしいですね。
