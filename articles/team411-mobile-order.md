@@ -4,7 +4,7 @@ emoji: "📱"
 type: "idea" # tech: 技術記事 / idea: アイデア
 topics: ["nextjs", "firebase", "strapi"]
 publication_name: "team411"
-published: false
+published: true
 ---
 
 この記事は [UEC 2 Advent Calendar 2023](https://adventar.org/calendars/8704) 15日目の記事です。
