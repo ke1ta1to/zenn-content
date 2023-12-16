@@ -25,7 +25,7 @@ https://adventar.org/calendars/8704
 
 https://www.uec.ac.jp/research/venture/contest.html
 
-![](https://storage.googleapis.com/zenn-user-upload/af632ae9e8d8-20231213.png =250x)
+![](https://storage.googleapis.com/zenn-user-upload/8c6db44f2dfa-20231216.png =250x)
 _U☆PoCで使用したポスター_
 
 なんとチームメンバーが考えてくれたアイディアが天才的なこともあって企業賞を受賞することができました。今回のモバイルオーダー導入はそのU☆PoCの一環でもありました。  
