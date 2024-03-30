@@ -4,6 +4,7 @@ emoji: "🍣"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["latex", "devcontainer"]
 published: true
+publication_name: "team411"
 ---
 
 お急ぎの方 → [構成ファイルを入れる](#構成ファイルを入れる)
@@ -16,7 +17,6 @@ published: true
 LaTeXはMacとかWindowsとかでインストール方法が異なって，さらに個人のパソコンの状態によってインストールに失敗したりします！やだ！
 ところでDev Containerを使うと「デバイスに依存しない」「ローカル環境を汚染しない」開発ができます．
 おっと．つまりそういうことですね，やるしかない
-ガチガチのガチの方はぜひ最後の番外編も！
 
 ## 対象読者
 
@@ -31,11 +31,11 @@ https://zenn.dev/e_chan1007/articles/8029f3f9dff2be
 - インストール時間が短い^[TeX Liveのミラーは主に激遅だが，これはGHCRからダウンロードするため]
 - なんかかっこいい！！（重要）
 
-また，パソコン初心者向けに書いても需要が空集合になると察したので，VSCodeとか触れるよ！そんな人向けに書きます
+また，パソコン初心者向けに書いても需要が空集合になると察したので，VSCodeとかある程度触れるよ！そんな人向けに書きます
 
 ## 必要なインストール
 
-この記事通りに進めればOK！
+この記事通りに進めればOK！（英語に負けるな）
 
 https://code.visualstudio.com/docs/devcontainers/tutorial
 
@@ -52,6 +52,8 @@ ghcr.io/eguchi1611/texlive-sci-ja/template
 ## 最後に
 
 思ったより書くことがありませんでした．Dev Containerはシンプルでいいね！
+意外と洗練されたLaTeXのDev Containerが見つからなかったのでこの機会に作成しました．
+この開発過程も下に記しておくので興味ある方は是非．
 ここまで読んでいただきありがとうございます！役に立っていたら幸いです．質問等はコメントへ
 
 ## 番外編
@@ -65,7 +67,45 @@ https://github.com/eguchi1611/texlive-sci-ja
 まずベースイメージの選定ですが，[`buildpack-deps:bookworm-scm`](https://hub.docker.com/_/buildpack-deps/)です．[デフォルトテンプレ群](https://hub.docker.com/_/microsoft-vscode-devcontainers)のイメージのベースがこれだからです．
 具体的には`mcr.microsoft.com/devcontainers/base`がベースですが，これはただ`buildpack-deps`と，後述するfeaturesを合体させてるだけです．
 
-次はDockerfileの作成です．世の中にはTeX LiveのDockerイメージが大量に落ちています．それを片っ端から読み漁りました．[私のはここからどうぞ](https://github.com/eguchi1611/texlive-sci-ja/blob/main/src/.devcontainer/Dockerfile)
+次はDockerfileの作成です．世の中にはTeX LiveのDockerイメージが大量に落ちています．それを片っ端から読み漁りました．
+こうなりました．
+
+```dockerfile:Dockerfile
+FROM buildpack-deps:bookworm-scm
+
+ARG TEXLIVE_MIRROR=https://tug.ctan.org/systems/texlive/tlnet
+
+ENV PATH=/usr/local/texlive/bin:$PATH
+
+WORKDIR /texlive-install
+
+COPY ./texlive.profile .
+
+# texliveをインストール
+RUN wget ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz \
+  && tar -xf install-tl-unx.tar.gz --strip-components 1 \
+  && ./install-tl -profile texlive.profile --location ${TEXLIVE_MIRROR} \
+  && ln -sf /usr/local/texlive/*/bin/* /usr/local/texlive/bin
+
+# latexmkのインストール
+RUN tlmgr install latexmk
+
+# GhostscriptとGnuplotをインストール
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get -y install --no-install-recommends ghostscript gnuplot \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/local/texlive/texmf-local/tex/latex/gnuplot
+
+# gnuplot-lua-tikzをインストール
+RUN gnuplot -e 'set term tikz createstyle' \
+  && mktexlsr
+
+WORKDIR /
+
+RUN rm -rf /texlive-install
+```
+
 以下ポイント
 
 - TeX Liveはミラーによって速度が変わりまくるのでARGでミラーを選択できるように
@@ -73,7 +113,7 @@ https://github.com/eguchi1611/texlive-sci-ja
 
 さてインストールプロファイルを作成しましょう．イメージのサイズを下げるために厳選してあります．理数系と言っている根拠はここなので，自分好みに変えるチャンスポイントです．私のイメージではこんな感じです．
 
-```
+```:texlive.profile
 # https://tug.org/texlive/doc/install-tl.html#PROFILES
 selected_scheme scheme-custom
 
@@ -93,8 +133,77 @@ tlpdbopt_install_srcfiles 0
 
 ここまででDockerのイメージは完成ですね．でもDev Containerのイメージの作成は一工夫必要です．
 `Common Utilities`という[Dev Container Features](https://containers.dev/features)が必要です．これを入れるとターミナルがいい感じに今のブランチ名を出してくれたり，良い恩恵が得られます．公式のDev Containerイメージはこれが入っています．こいつも含めた状態でイメージをビルドしたいですね．GitHub Actionsで済ませます．
-Actionsでイメージのビルドといったら！`docker/build-push-action`ではありません．Dev Containerのイメージのビルド用Actions^[[Dev Container CLI](https://github.com/devcontainers/cli)のbuildをActionsにしてくれたやつ]があります．`devcontainers/ci`ですね．これを使ってビルドすると，Dev ContainerのFeatures，もっというとVSCodeの拡張機能も全部まとめて1つのイメージにしてくれます！ナイス！
-[私のactionsファイルはここからどうぞ](https://github.com/eguchi1611/texlive-sci-ja/blob/main/.github/workflows/pre-build.yml)
+Actionsでイメージのビルドといったら！`docker/build-push-action`ではありません．Dev Containerのイメージのビルド用Actions^[[Dev Container CLI](https://github.com/devcontainers/cli)のbuildをActionsにしてくれたやつ]があります．`devcontainers/ci`ですね．これを使ってビルドすると，Dev ContainerのFeatures，もっというとVSCodeの拡張機能と設定も全部まとめて1つのイメージにしてくれます！ナイス！
+私のは以下のdevcontainer.jsonが適用された状態のイメージが出てきますよ．
+
+```json:devcontainer.json
+{
+  "name": "TeX Live",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "vscode"
+    },
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["James-Yu.latex-workshop"],
+      "settings": {
+        "latex-workshop.latex.recipe.default": "latexmk (latexmkrc)"
+      }
+    }
+  },
+  "remoteUser": "vscode"
+}
+```
+
+Actionsファイルはこうです
+
+```yaml:build.yml
+name: "Pre-build TeX Live Dev Container Image"
+
+on:
+  push:
+    branches:
+      - "main"
+  schedule:
+    - cron: "0 0 * * 0" # 毎週日曜 (UTC)
+  workflow_dispatch:
+
+env:
+  REGISTRY_IMAGE: ghcr.io/eguchi1611/texlive-sci-ja
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pre-build dev container image
+        uses: devcontainers/ci@v0.3
+        env:
+          BUILDX_NO_DEFAULT_ATTESTATIONS: true
+        with:
+          imageName: ${{ env.REGISTRY_IMAGE }}
+          cacheFrom: ${{ env.REGISTRY_IMAGE }}
+          platform: linux/amd64,linux/arm64
+          subFolder: ./src
+          push: always
+```
+
 これでイメージが完成です！
 
 ### Dev Containerのテンプレートの作成
@@ -104,4 +213,5 @@ GitHubのActions，`devcontainers/action`です．こいつがいい感じにし
 公式が分かりやすいので貼っておきますね
 https://github.com/devcontainers/template-starter
 
-以上！いい感じのLaTeXライフが送れますように．
+以上！番外編の方が長くなってしまった．
+いい感じのLaTeXライフが送れますように．
