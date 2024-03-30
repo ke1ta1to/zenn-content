@@ -6,6 +6,14 @@ topics: ["latex", "devcontainer"]
 published: true
 ---
 
+## お急ぎの方
+
+開発コンテナの構成ファイルを選ぶフェーズで以下を入力してください
+
+```
+ghcr.io/eguchi1611/texlive-sci-ja/template
+```
+
 ## はじめに
 
 入学して早々LaTeXのインストールを急かされる大学があるそうですが．
@@ -25,42 +33,26 @@ https://zenn.dev/e_chan1007/articles/8029f3f9dff2be
 
 - PCのローカル環境が汚れない
 - インストールに失敗しない（Docker，VSCodeとかのインストールは知らん）
+- インストール時間が短い^[TeX Liveのミラーは主に激遅だが，これはGHCRからダウンロードするため]
 - なんかかっこいい！！（重要）
 
 また，パソコン初心者向けに書いても需要が空集合になると察したので，VSCodeとか触れるよ！そんな人向けに書きます
 
 ## 必要なインストール
 
-[Dev Containers tutorial](https://code.visualstudio.com/docs/devcontainers/tutorial)ができればOK！
+この記事通りに進めればOK！
 
-### インストール詳細
-
-[Dev Containers tutorial](https://code.visualstudio.com/docs/devcontainers/tutorial)ができてたら必要はないけど一応．
-
-- [Docker Desktop](https://www.docker.com/ja-jp/products/docker-desktop/)
-  - ターミナルから`docker --version`を実行して確認
-- [Visual Studio Code](https://code.visualstudio.com/Download)
-  - [Dev Containers拡張機能](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)を入れる
+https://code.visualstudio.com/docs/devcontainers/tutorial
 
 ## 構成ファイルを入れる
 
-Dev Containerのテンプレートを入れよう！
+開発コンテナの構成ファイルを選ぶフェーズで以下を入力してください
 
-1. 適当にディレクトリを作って，VSCodeでそこを開いた状態にしておいてください．
-2. VSCodeの左下の「><」みたいなのを押して，「開発コンテナー構成ファイルを追加...」を選択
-3. 「ワークスペースに構成ファイルを追加」の方がおすすめ
-4. 一番上の入力ボックスに`ghcr.io/eguchi1611/texlive-sci-ja/template`を入力
-5. 機能の選択画面はそのままスルー
-6. こんな感じになったらOK！
-   ![](https://storage.googleapis.com/zenn-user-upload/1e8b1a55def5-20240329.png =400x)
-7. 右下の「コンテナーで再度開く」を選択
+```
+ghcr.io/eguchi1611/texlive-sci-ja/template
+```
 
-以上ですね．VSCodeでターミナルを開いて`uplatex -version`で確認してください
-
-## 快適なLaTeXライフを
-
-- 適当にディレクトリを作って複数のドキュメントを管理
-- Gitを入れて管理([.gitignore](https://github.com/github/gitignore/blob/main/TeX.gitignore))
+以上ですね．開発コンテナを開いてターミナルから`uplatex -version`で確認してください
 
 ## 最後に
 
@@ -75,3 +67,4 @@ https://github.com/eguchi1611/latex-devcontainer-sample
 - なんでこんな複雑なんだよ
 - Dockerイメージの開発
 - 開発コンテナのテンプレートの作成
+- TeX Workshopについて
