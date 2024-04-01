@@ -47,6 +47,8 @@ Dev Containerの構成ファイルを選ぶフェーズで以下を入力して�
 ghcr.io/eguchi1611/texlive-sci-ja/template
 ```
 
+![](https://storage.googleapis.com/zenn-user-upload/c5d9466c8d8a-20240401.png)
+
 以上ですね．Dev Containerを開いてターミナルから`uplatex -version`で確認してください
 
 ## 最後に
