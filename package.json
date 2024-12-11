@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/kk79it/zenn-content#readme",
   "dependencies": {
-    "zenn-cli": "^0.1.155"
+    "zenn-cli": "^0.1.158"
   },
   "devDependencies": {
     "prettier": "3.0.3"
