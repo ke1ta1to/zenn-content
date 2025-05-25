@@ -44,7 +44,7 @@ https://code.visualstudio.com/docs/devcontainers/tutorial
 Dev Containerの構成ファイルを選ぶフェーズで以下を入力してください
 
 ```
-ghcr.io/eguchi1611/texlive-sci-ja/template
+ghcr.io/ke1ta1to/texlive-sci-ja/template
 ```
 
 ![](https://storage.googleapis.com/zenn-user-upload/c5d9466c8d8a-20240401.png)
@@ -63,7 +63,7 @@ ghcr.io/eguchi1611/texlive-sci-ja/template
 ### Dockerイメージの開発
 
 イメージの開発にかなり時間を割きました．私の結論（思い出）はこのリポジトリに詰まっています．
-https://github.com/eguchi1611/texlive-sci-ja
+https://github.com/ke1ta1to/texlive-sci-ja
 せっかくなので解説します．私の本当の環境構築のおすすめは，自分好みのイメージを作ることです．これを参考にどうですか？
 
 まずベースイメージの選定ですが，[`buildpack-deps:bookworm-scm`](https://hub.docker.com/_/buildpack-deps/)です．[デフォルトテンプレ群](https://hub.docker.com/_/microsoft-vscode-devcontainers)のイメージのベースがこれだからです．
@@ -176,7 +176,7 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY_IMAGE: ghcr.io/eguchi1611/texlive-sci-ja
+  REGISTRY_IMAGE: ghcr.io/ke1ta1to/texlive-sci-ja
 
 jobs:
   deploy:
